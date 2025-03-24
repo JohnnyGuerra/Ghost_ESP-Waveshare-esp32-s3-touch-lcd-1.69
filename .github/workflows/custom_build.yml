@@ -33,7 +33,7 @@ jobs:
           ~/esp-idf/install.sh
 
       - name: Apply Custom SDK Config (Waveshare)
-        run: cp "configs/sdkconfig.waveshare169" sdkconfig.defaults #Assumes you create sdkconfig.waveshare169
+        run: cp "configs/sdkconfig.waveshare169" sdkconfig.defaults # Assumes you create sdkconfig.waveshare169
 
       - name: Set up ESP-IDF and Target
         run: |
