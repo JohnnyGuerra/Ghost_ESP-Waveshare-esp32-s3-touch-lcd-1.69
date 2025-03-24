@@ -1,4 +1,3 @@
-```yaml
 name: Compile and Deploy GhostESP (Waveshare LCD)
 
 on:
