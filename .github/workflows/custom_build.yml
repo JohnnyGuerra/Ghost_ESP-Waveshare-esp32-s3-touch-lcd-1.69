@@ -31,8 +31,19 @@ jobs:
           git clone -b v5.3.1 --depth 1 https://github.com/espressif/esp-idf.git ~/esp-idf
           ~/esp-idf/install.sh
 
+      - name: Check for SDK Config File
+        id: check_config
+        uses: andstor/file-existence-action@v2
+        with:
+          file: "configs/sdkconfig.waveshare169"
+
       - name: Apply Custom SDK Config (Waveshare)
-        run: cp "configs/sdkconfig.waveshare169" sdkconfig.defaults # Assumes you create sdkconfig.waveshare169
+        if: steps.check_config.outputs.files_exists == 'true'
+        run: cp "configs/sdkconfig.waveshare169" sdkconfig.defaults
+        
+      - name: Apply default SDK config (waveshare)
+        if: steps.check_config.outputs.files_exists == 'false'
+        run: cp "configs/sdkconfig.default.esp32s3" sdkconfig.defaults # Use default if custom config doesn't exist.
 
       - name: Set up ESP-IDF and Target
         run: |
@@ -169,10 +180,4 @@ jobs:
         if: github.event.inputs.buildType == 'release'
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          curl -H "Content-Type: application/json" -d '{
-            "embeds": [{
-              "title": "🎉 GhostESP Release Build (Waveshare 1.69\")!",
-              "description": "A new release build for the Waveshare ESP32-S3-Touch-LCD-1.69 has been uploaded to Cloudflare R2 and GitHub Release.",
-              "color": 5814783,
-              "timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"
+        run:
