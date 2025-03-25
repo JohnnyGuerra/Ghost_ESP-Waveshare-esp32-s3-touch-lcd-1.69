@@ -115,6 +115,9 @@ jobs:
           # Handle predefined display configurations
           if [ "${{ github.event.inputs.display_type }}" != "custom" ] && [ "${{ github.event.inputs.display_type }}" != "none" ]; then
             case "${{ github.event.inputs.display_type }}" in
+              "Waveshare_169") #Add this line.
+                cp "configs/sdkconfig.waveshare169" sdkconfig.defaults #Added this line.
+                ;;
               "MarauderV4_FlipperHub")
                 cp "configs/sdkconfig.marauderv4" sdkconfig.defaults
                 ;;
