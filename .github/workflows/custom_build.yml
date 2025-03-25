@@ -19,6 +19,7 @@ on:
         type: choice
         options:
           - custom
+          - Waveshare_169
           - none
           - MarauderV4_FlipperHub
           - MarauderV6_AwokDual
@@ -169,6 +170,7 @@ jobs:
           # Handle touch support
           if [ "${{ github.event.inputs.use_touch }}" == "true" ] || \
              [ "${{ github.event.inputs.display_type }}" == "ESP32-S3-Cardputer" ] || \
+             [ "${{ github.event.inputs.display_type }}" == "Waveshare_169" ] || \
              [ "${{ github.event.inputs.display_type }}" == "LillyGoTWatch_S3" ] || \
              [[ "${{ github.event.inputs.display_type }}" == CYD* ]]; then
             echo "CONFIG_USE_TOUCHSCREEN=y" >> sdkconfig.defaults
