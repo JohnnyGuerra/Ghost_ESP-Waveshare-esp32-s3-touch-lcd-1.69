@@ -30,6 +30,10 @@
 #include "vendor/drivers/ST7262.h"
 #endif
 
+#ifdef CONFIG_USE_169_INCHER
+#include "vendor/drivers/st7789.h"
+#endif
+
 #ifdef CONFIG_JC3248W535EN_LCD
 #include "axs15231b/esp_bsp.h"
 #include "axs15231b/lv_port.h"
@@ -41,7 +45,7 @@
 #endif
 
 #ifndef CONFIG_TFT_HEIGHT
-#define CONFIG_TFT_HEIGHT 320
+#define CONFIG_TFT_HEIGHT 280
 #endif
 
 #define LVGL_TASK_PERIOD_MS 5
