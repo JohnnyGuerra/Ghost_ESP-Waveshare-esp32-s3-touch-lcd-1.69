@@ -53,6 +53,23 @@ extern "C" {
     } while(0)
 #endif
 
+/* Board-Specific Error Handling for Waveshare 1.69" LCD Touch ESP32-S3R8 */
+#ifdef CONFIG_WAVESHARE_169_LCD_TOUCH
+#define BSP_ERROR_CHECK_LCD(x, ret) do { \
+        if (unlikely((x) != ESP_OK)) {   \
+            ESP_LOGE("LCD", "LCD Error: %s", esp_err_to_name(x)); \
+            return ret;                  \
+        }                                \
+    } while(0)
+
+#define BSP_ERROR_CHECK_TOUCH(x, ret) do { \
+        if (unlikely((x) != ESP_OK)) {     \
+            ESP_LOGE("TOUCH", "Touch Error: %s", esp_err_to_name(x)); \
+            return ret;                    \
+        }                                  \
+    } while(0)
+#endif
+
 #ifdef __cplusplus
 }
 #endif

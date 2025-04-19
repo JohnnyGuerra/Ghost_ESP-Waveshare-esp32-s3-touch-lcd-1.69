@@ -30,12 +30,18 @@
 #define BSP_LCD_BITS_PER_PIXEL      (16)
 /* LCD display color space */
 #define BSP_LCD_COLOR_SPACE         (ESP_LCD_COLOR_SPACE_RGB)
-/* LCD definition */
-#define EXAMPLE_LCD_I80_H_RES       (170)
-#define EXAMPLE_LCD_I80_V_RES       (560)
 
-#define EXAMPLE_LCD_QSPI_H_RES      (320)
-#define EXAMPLE_LCD_QSPI_V_RES      (480)
+/* Waveshare 1.69" LCD Touch ESP32-S3R8 Configuration */
+#ifdef CONFIG_WAVESHARE_169_LCD_TOUCH
+#define BSP_LCD_H_RES               (240)  // Horizontal resolution
+#define BSP_LCD_V_RES               (280)  // Vertical resolution
+#define BSP_LCD_BACKLIGHT_GPIO      (15)   // Backlight GPIO pin
+#define BSP_LCD_RESET_GPIO          (8)    // Reset GPIO pin
+#define BSP_LCD_DC_GPIO             (4)    // Data/Command GPIO pin
+#define BSP_LCD_CS_GPIO             (5)    // Chip Select GPIO pin
+#define BSP_LCD_SCLK_GPIO           (6)    // SPI Clock GPIO pin
+#define BSP_LCD_MOSI_GPIO           (7)    // SPI MOSI GPIO pin
+#endif
 
 /**
  * @brief Tear configuration structure

@@ -1,11 +1,15 @@
 #ifndef CALLBACKS_H
 #define CALLBACKS_H
+
 #include "esp_wifi_types.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "vendor/GPS/MicroNMEA.h"
 #include <esp_timer.h>
 #include <time.h>
+#include "lvgl.h"
+#include "esp_lcd_touch.h"
+
 // nimble
 #ifndef CONFIG_IDF_TARGET_ESP32S2
 #include "host/ble_gap.h"
@@ -61,6 +65,12 @@ void gps_event_handler(void *event_handler_arg, esp_event_base_t event_base,
 void wifi_stations_sniffer_callback(void *buf,
                                     wifi_promiscuous_pkt_type_t type);
 
+// Waveshare 1.69" LCD Touch ESP32-S3R8-specific callbacks
+#ifdef CONFIG_WAVESHARE_169_LCD_TOUCH
+void touch_event_callback(lv_indev_drv_t *drv, lv_indev_data_t *data);
+void display_refresh_callback(void);
+#endif
+
 typedef enum {
   WPS_MODE_NONE = 0, // No WPS support
   WPS_MODE_PBC,      // Push Button Configuration (PBC)
@@ -74,6 +84,7 @@ typedef struct {
   wps_modes_t wps_mode; // WPS mode (PIN or PBC)
 } wps_network_t;
 
+// External variables
 extern gps_t *gps;
 extern wps_network_t detected_wps_networks[MAX_WPS_NETWORKS];
 extern int detected_network_count;

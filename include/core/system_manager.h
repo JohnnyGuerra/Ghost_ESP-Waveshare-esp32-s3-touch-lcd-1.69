@@ -41,4 +41,23 @@ bool system_manager_set_task_priority(const char *task_name,
 // Print the list of all tasks
 void system_manager_list_tasks();
 
+// Waveshare 1.69" LCD Touch ESP32-S3R8-specific task management
+#ifdef CONFIG_WAVESHARE_169_LCD_TOUCH
+// Create a task for handling display updates
+bool system_manager_create_display_task(void (*task_function)(void *),
+                                        uint32_t stack_size,
+                                        UBaseType_t priority);
+
+// Create a task for handling touch input
+bool system_manager_create_touch_task(void (*task_function)(void *),
+                                      uint32_t stack_size,
+                                      UBaseType_t priority);
+
+// Remove the display task
+bool system_manager_remove_display_task();
+
+// Remove the touch task
+bool system_manager_remove_touch_task();
+#endif
+
 #endif // SYSTEM_MANAGER_H

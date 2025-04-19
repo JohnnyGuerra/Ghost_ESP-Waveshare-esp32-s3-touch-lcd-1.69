@@ -48,7 +48,7 @@ menu "Ghost ESP Options"
     
     config WITH_SCREEN
         bool "Enable Screen Support"
-        default n
+        default y
         help
             Enable or disable screen support.
     
@@ -61,64 +61,124 @@ menu "Ghost ESP Options"
     
     config TFT_HEIGHT
         int "TFT Height"
-        default 320
+        default 280
         depends on WITH_SCREEN
         help
             Set the height of the TFT display.
     
     config USE_TOUCHSCREEN
         bool "Enable Touchscreen"
-        default n
+        default y
         help
             Enable touchscreen input.
     
-    config USE_JOYSTICK
-        bool "Enable Joystick"
-        default n
-        help
-            Enable joystick input.
-    
-    config USE_CARDPUTER
-        bool "Enable Cardputer"
-        default n
-        help
-            Enable Cardputer input.
-    
-    config USE_7_INCHER
-        bool "Use 7-inch Display"
-        default n
-        help
-            Set to enable 7-inch display support.
-    
     config Waveshare_LCD
         bool "Enable Waveshare LCD"
-        default n
+        default y
         help
             Enable support for Waveshare LCD.
-    
-    config Crowtech_LCD
-        bool "Enable Crowtech LCD"
-        default n
-        help
-            Enable support for Crowtech LCD.
-    
-    config Sunton_LCD
-        bool "Enable Sunton LCD"
-        default n
-        help
-            Enable support for Sunton LCD.
 
-    config JC3248W535EN_LCD
-        bool "Enable JC3248W535EN LCD"
-        default n
+    config ESP32S3R8_PIN_NUM_DISPLAY_DC
+        int "LCD DC Pin"
+        default 4
         help
-            Enable support for JC3248W535EN LCD.
+            Define the pin for the LCD DC signal.
 
-    config USE_ILI9341_2
-        bool "Use ILI9341 2nd Display Driver"
-        default n
+    config ESP32S3R8_PIN_NUM_DISPLAY_CS
+        int "LCD CS Pin"
+        default 5
         help
-            Enable support for ILI9341 display module.
+            Define the pin for the LCD CS signal.
+
+    config ESP32S3R8_PIN_NUM_DISPLAY_SCLK
+        int "LCD SCLK Pin"
+        default 6
+        help
+            Define the pin for the LCD SPI clock.
+
+    config ESP32S3R8_PIN_NUM_DISPLAY_MOSI
+        int "LCD MOSI Pin"
+        default 7
+        help
+            Define the pin for the LCD SPI data.
+
+    config ESP32S3R8_PIN_NUM_DISPLAY_RST
+        int "LCD Reset Pin"
+        default 8
+        help
+            Define the pin for the LCD reset signal.
+
+    config ESP32S3R8_PIN_NUM_DISPLAY_BCKL
+        int "LCD Backlight Pin"
+        default 15
+        help
+            Define the pin for the LCD backlight control.
+
+    config ESP32S3R8_PIN_NUM_TOUCH_SCL
+        int "Touch SCL Pin"
+        default 10
+        help
+            Define the pin for the touchscreen I2C clock.
+
+    config ESP32S3R8_PIN_NUM_TOUCH_SDA
+        int "Touch SDA Pin"
+        default 11
+        help
+            Define the pin for the touchscreen I2C data.
+
+    config ESP32S3R8_PIN_NUM_TOUCH_RST
+        int "Touch Reset Pin"
+        default 13
+        help
+            Define the pin for the touchscreen reset signal.
+
+    config ESP32S3R8_PIN_NUM_TOUCH_INT
+        int "Touch Interrupt Pin"
+        default 14
+        help
+            Define the pin for the touchscreen interrupt signal.
+
+    endmenu
+
+    menu "Peripheral Options"
+
+    config HAS_BATTERY
+        bool "Enable Battery Management"
+        default y
+        help
+            Enable battery management features.
+
+    config ESP32S3R8_HAS_BATTERY_ETA6098
+        bool "Enable ETA6098 Battery Manager"
+        default y
+        depends on HAS_BATTERY
+        help
+            Enable support for the ETA6098 battery management IC.
+
+    config HAS_RTC_CLOCK
+        bool "Enable RTC Clock"
+        default y
+        help
+            Enable RTC Clock.
+
+    config ESP32S3R8_HAS_RTC_PCF85063
+        bool "Enable PCF85063 RTC"
+        default y
+        depends on HAS_RTC_CLOCK
+        help
+            Enable support for the PCF85063 RTC chip.
+
+    config ESP32S3R8_HAS_IMU_QMI8658
+        bool "Enable QMI8658 IMU"
+        default y
+        help
+            Enable support for the QMI8658 6-axis IMU.
+
+    config ESP32S3R8_PIN_NUM_BUZZER
+        int "Buzzer Pin"
+        default 42
+        help
+            Define the pin for the buzzer.
 
     endmenu
 
@@ -330,4 +390,4 @@ menu "Ghost ESP Options"
     
     endmenu
     
-endmenu    
+endmenu

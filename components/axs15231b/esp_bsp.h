@@ -1,4 +1,3 @@
-
 /*
  * SPDX-FileCopyrightText: 2022-2024 Espressif Systems (Shanghai) CO LTD
  *
@@ -7,12 +6,10 @@
 
 /**
  * @file
- * @brief ESP BSP: ESP-BOX-3
+ * @brief ESP BSP: Waveshare 1.69" LCD Touch ESP32-S3R8
  */
 
 #pragma once
-
-
 
 #include "sdkconfig.h"
 #include "driver/gpio.h"
@@ -20,63 +17,37 @@
 #include "lvgl.h"
 #include "lv_port.h"
 
-#ifdef CONFIG_JC3248W535EN_LCD
+#ifdef CONFIG_WAVESHARE_169_LCD_TOUCH
 
 /**************************************************************************************************
- *  pinout
+ *  Pinout for Waveshare 1.69" LCD Touch ESP32-S3R8
  **************************************************************************************************/
 #define BSP_I2C_NUM                     (I2C_NUM_0)
 #define BSP_I2C_CLK_SPEED_HZ            400000
 
-#define EXAMPLE_LCD_QSPI_HOST           (SPI2_HOST)
+#define BSP_LCD_SPI_HOST                (SPI2_HOST)
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////// LCD spec of QSPI /////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#define BSP_LCD_H_RES                   (240)  // Horizontal resolution
+#define BSP_LCD_V_RES                   (280)  // Vertical resolution
 
-#define EXAMPLE_PIN_NUM_QSPI_CS         (GPIO_NUM_45)
-#define EXAMPLE_PIN_NUM_QSPI_PCLK       (GPIO_NUM_47)
-#define EXAMPLE_PIN_NUM_QSPI_DATA0      (GPIO_NUM_21)
-#define EXAMPLE_PIN_NUM_QSPI_DATA1      (GPIO_NUM_48)
-#define EXAMPLE_PIN_NUM_QSPI_DATA2      (GPIO_NUM_40)
-#define EXAMPLE_PIN_NUM_QSPI_DATA3      (GPIO_NUM_39)
-#define EXAMPLE_PIN_NUM_QSPI_RST        (GPIO_NUM_NC)
-#define EXAMPLE_PIN_NUM_QSPI_DC         (GPIO_NUM_8)
-#define EXAMPLE_PIN_NUM_QSPI_TE         (GPIO_NUM_38)
-#define EXAMPLE_PIN_NUM_QSPI_BL         (GPIO_NUM_1)
+#define BSP_LCD_BACKLIGHT_GPIO          (15)   // Backlight GPIO pin
+#define BSP_LCD_RESET_GPIO              (8)    // Reset GPIO pin
+#define BSP_LCD_DC_GPIO                 (4)    // Data/Command GPIO pin
+#define BSP_LCD_CS_GPIO                 (5)    // Chip Select GPIO pin
+#define BSP_LCD_SCLK_GPIO               (6)    // SPI Clock GPIO pin
+#define BSP_LCD_MOSI_GPIO               (7)    // SPI MOSI GPIO pin
 
-#define EXAMPLE_PIN_NUM_QSPI_TOUCH_SCL  (GPIO_NUM_8)
-#define EXAMPLE_PIN_NUM_QSPI_TOUCH_SDA  (GPIO_NUM_4)
-#define EXAMPLE_PIN_NUM_QSPI_TOUCH_RST  (-1)
-#define EXAMPLE_PIN_NUM_QSPI_TOUCH_INT  (-1)
+#define BSP_TOUCH_SCL_GPIO              (10)   // Touch I2C Clock GPIO pin
+#define BSP_TOUCH_SDA_GPIO              (11)   // Touch I2C Data GPIO pin
+#define BSP_TOUCH_RST_GPIO              (13)   // Touch Reset GPIO pin
+#define BSP_TOUCH_INT_GPIO              (14)   // Touch Interrupt GPIO pin
 
-#else 
-
-#define EXAMPLE_PIN_NUM_QSPI_CS         (-1)
-#define EXAMPLE_PIN_NUM_QSPI_PCLK       (-1)
-#define EXAMPLE_PIN_NUM_QSPI_DATA0      (-1)
-#define EXAMPLE_PIN_NUM_QSPI_DATA1      (-1)
-#define EXAMPLE_PIN_NUM_QSPI_DATA2      (-1)
-#define EXAMPLE_PIN_NUM_QSPI_DATA3      (-1)
-#define EXAMPLE_PIN_NUM_QSPI_RST        (-1)
-#define EXAMPLE_PIN_NUM_QSPI_DC         (-1)
-#define EXAMPLE_PIN_NUM_QSPI_TE         (-1)
-#define EXAMPLE_PIN_NUM_QSPI_BL         (-1)
-
-#define EXAMPLE_PIN_NUM_QSPI_TOUCH_SCL  (-1)
-#define EXAMPLE_PIN_NUM_QSPI_TOUCH_SDA  (-1)
-#define EXAMPLE_PIN_NUM_QSPI_TOUCH_RST  (-1)
-#define EXAMPLE_PIN_NUM_QSPI_TOUCH_INT  (-1)
-
-#define BSP_I2C_NUM                     (I2C_NUM_0)
-#define BSP_I2C_CLK_SPEED_HZ            400000
-
-#define EXAMPLE_LCD_QSPI_HOST           (SPI2_HOST)
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 /**
  * @brief BSP display configuration structure
  *
@@ -88,7 +59,7 @@ typedef struct {
 } bsp_display_cfg_t;
 
 /**
- * @brief Init I2C driver
+ * @brief Initialize I2C driver
  *
  * @return
  *      - ESP_OK                On success
@@ -99,7 +70,7 @@ typedef struct {
 esp_err_t bsp_i2c_init(void);
 
 /**
- * @brief Deinit I2C driver and free its resources
+ * @brief Deinitialize I2C driver and free its resources
  *
  * @return
  *      - ESP_OK                On success
@@ -111,17 +82,17 @@ esp_err_t bsp_i2c_deinit(void);
 /**
  * @brief Initialize display
  *
- * This function initializes SPI, display controller and starts LVGL handling task.
- * LCD backlight must be enabled separately by calling bsp_display_brightness_set()
+ * This function initializes SPI, display controller, and starts the LVGL handling task.
+ * LCD backlight must be enabled separately by calling bsp_display_brightness_set().
  *
- * @param cfg display configuration
+ * @param cfg Display configuration
  *
- * @return Pointer to LVGL display or NULL when error occurred
+ * @return Pointer to LVGL display or NULL when an error occurred
  */
 lv_disp_t *bsp_display_start_with_config(const bsp_display_cfg_t *cfg);
 
 /**
- * @brief Get pointer to input device (touch, buttons, ...)
+ * @brief Get pointer to input device (touch, buttons, etc.)
  *
  * @note The LVGL input device is initialized in bsp_display_start() function.
  *
@@ -143,6 +114,41 @@ bool bsp_display_lock(uint32_t timeout_ms);
  *
  */
 void bsp_display_unlock(void);
+
+/**
+ * @brief Set display brightness
+ *
+ * Brightness is controlled with a PWM signal to the backlight GPIO pin.
+ * Display must be initialized by calling bsp_display_start_with_config().
+ *
+ * @param brightness_percent Brightness in [%]
+ * @return
+ *      - ESP_OK                On success
+ *      - ESP_ERR_INVALID_ARG   Parameter error
+ */
+esp_err_t bsp_display_brightness_set(int brightness_percent);
+
+/**
+ * @brief Turn on display backlight
+ *
+ * Display must be initialized by calling bsp_display_start_with_config().
+ *
+ * @return
+ *      - ESP_OK                On success
+ *      - ESP_ERR_INVALID_ARG   Parameter error
+ */
+esp_err_t bsp_display_backlight_on(void);
+
+/**
+ * @brief Turn off display backlight
+ *
+ * Display must be initialized by calling bsp_display_start_with_config().
+ *
+ * @return
+ *      - ESP_OK                On success
+ *      - ESP_ERR_INVALID_ARG   Parameter error
+ */
+esp_err_t bsp_display_backlight_off(void);
 
 #ifdef __cplusplus
 }
